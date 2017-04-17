@@ -1,0 +1,55 @@
+#include <Wire.h>
+#include "MS5837.h"
+#include "TSYS01.h"
+-
+MS5837 depthsensor;
+TSYS01 tempsensor;
+
+void setup() {
+  
+  Serial.begin(9600);
+  
+  Serial.println("Starting");
+  
+  Wire.begin();
+
+  depthsensor.init();
+  tempsensor.init();
+  
+  depthsensor.setFluidDensity(1029); // kg/m^3 (997 freshwater, 1029 for seawater)
+}
+
+void loop() {
+
+  depthsensor.read();
+
+  Serial.print("Pressure: "); 
+  Serial.print(depthsensor.pressure()); 
+  Serial.println(" mbar");
+  
+  Serial.print("Temperature: "); 
+  Serial.print(depthsensor.temperature()); 
+  Serial.println(" deg C");
+  
+  Serial.print("Depth: "); 
+  Serial.print(depthsensor.depth()); 
+  Serial.println(" m");
+  
+  Serial.print("Altitude: "); 
+  Serial.print(depthsensor.altitude()); 
+  Serial.println(" m above mean sea level");
+
+  delay(1000);
+
+  tempsensor.read();
+ 
+  Serial.print("Temperature: ");
+  Serial.print(tempsensor.temperature()); 
+  Serial.println(" deg C");
+   
+  Serial.println("---");
+
+  delay(1000);
+}
+
+
